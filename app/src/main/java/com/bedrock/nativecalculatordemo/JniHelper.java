@@ -30,12 +30,14 @@ public class JniHelper {
         return singleton;
     }
 
-    private JniHelper(){};
+    private JniHelper() {
+        nativeInit();
+    };
 
-    private IAlertListener alertListener;
+    private IJniListener jniListener;
 
-    public void registerAlertListener(IAlertListener listener) {
-        alertListener = listener;
+    public void registerAlertListener(IJniListener listener) {
+        jniListener = listener;
     }
 
 
@@ -84,10 +86,21 @@ public class JniHelper {
 
     //toast a msg
     private void toastMsg(String msg) {
-        if(alertListener != null) {
-            alertListener.sendAlert(msg);
+        if(jniListener != null) {
+            jniListener.sendAlert(msg);
         }
     }
+
+    // called from native
+    //refresh MainActivity's text view
+    private void refreshResultView(String content) {
+        if(jniListener != null) {
+            jniListener.refreshResultView(content);
+        }
+    }
+
+    //native init
+    private native void nativeInit();
 
     //input char  ( "0 - 9 ." )
     private native void inputChar(String c);

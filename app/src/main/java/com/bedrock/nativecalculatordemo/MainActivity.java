@@ -1,8 +1,12 @@
 package com.bedrock.nativecalculatordemo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,6 +14,7 @@ import android.widget.Toast;
 import com.bedrock.nativecalculatordemo.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
 
     private final JniHelper jniHelper = JniHelper.getInstance();
 
@@ -26,10 +31,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initView();
 
-        jniHelper.registerAlertListener(new IAlertListener() {
+        jniHelper.registerAlertListener(new IJniListener() {
             @Override
             public void sendAlert(String msg) {
                 Toast.makeText(MainActivity.this, "native msg : " + msg, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void refreshResultView(String msg) {
+                tvResult.setText(msg);
+            }
+
+            @Override
+            public void appendMsg2RefreshView(String append) {
+                String newStr = tvResult.getText().toString() + append;
+                tvResult.setText(newStr);
             }
         });
 
@@ -106,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 jniHelper.inputC(".");
                 break;
             case R.id.btn_result:
-                jniHelper.doCalculate();
+                double result = jniHelper.doCalculate();
+                tvResult.setText(result + "");
                 break;
             case R.id.tv_result:
                 tvResult.setText("0");
