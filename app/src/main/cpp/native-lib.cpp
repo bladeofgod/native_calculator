@@ -46,9 +46,9 @@ extern "C" {
  */
 void toastMsgToApp(String message) {
 
-    char* cMsg = new char[256];
-    strcpy(cMsg,message.c_str());
-    jstring msg = appContext.env->NewStringUTF(cMsg);
+    std::unique_ptr<char> cMsg(new char[256]);
+    strcpy(cMsg.get(),message.c_str());
+    jstring msg = appContext.env->NewStringUTF(cMsg.get());
     appContext.env->CallVoidMethod(appContext.jniHelperObj,
                                    appContext.jniHelperCallback,
                                    msg);
@@ -112,9 +112,10 @@ Java_com_bedrock_nativecalculatordemo_JniHelper_inputChar(
         jobject /* this */,
         jstring c) {
     //kind rough...
-    char* cPtr = new char[128];
-    strcpy(cPtr,jstring2String(env,c).c_str());
-    calculator.inputExpression(cPtr);
+    //char* cPtr = new char[128];
+    std::unique_ptr<char> cPtr(new char[128]);
+    strcpy(cPtr.get(),jstring2String(env,c).c_str());
+    calculator.inputExpression(cPtr.get());
 
     refreshResultView(calculator.getExpressionStr());
 }
