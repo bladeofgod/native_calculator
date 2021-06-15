@@ -31,6 +31,7 @@ bool Calculator::checkOperationExist() {
 
 void Calculator::setOperationSymbol(OperationSymbol symbol) {
     operationSymbol = symbol;
+    expression.append(getSymbolStr());
 }
 
 double Calculator::doCalculate() throw (CalculateException){
@@ -68,6 +69,7 @@ bool Calculator::checkExpressionLegal() {
 void Calculator::resetStatus() {
     firstNum = 0.0;
     secondNum = 0.0;
+    expression = "";
     operationSymbol = None;
 }
 

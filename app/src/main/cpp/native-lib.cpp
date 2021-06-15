@@ -102,6 +102,7 @@ Java_com_bedrock_nativecalculatordemo_JniHelper_resetCalculator(
         jobject /* this */) {
 
     calculator.resetStatus();
+    refreshResultView(calculator.getExpressionStr());
 }
 
 //input char
@@ -131,6 +132,7 @@ Java_com_bedrock_nativecalculatordemo_JniHelper_nativeCalculate(
     } catch (CalculateException exception) {
         toastMsgToApp(exception.msg);
     }
+    calculator.resetStatus();
 
     return result;
 }

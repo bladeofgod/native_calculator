@@ -125,11 +125,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 double result = jniHelper.doCalculate();
                 tvResult.setText(result + "");
                 break;
-            case R.id.tv_result:
-                tvResult.setText("0");
+            case R.id.btn_clear:
                 jniHelper.clear();
                 break;
-
         }
     }
 }
